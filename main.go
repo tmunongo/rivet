@@ -15,7 +15,10 @@ import (
 	"github.com/tmunongo/rivet/watcher"
 )
 
-var version = "dev"
+var (
+	version = ""
+	build = ""
+)
 
 func main() {
 	// Setup structured logger
@@ -35,7 +38,6 @@ func main() {
 	defaultConfigPath, err := getDefaultConfigPath()
 	if err != nil {
 		slog.Error("Failed to determine default config path", "error", err)
-		// Fallback, though this might not be ideal if user home dir is critical
 		home, homeErr := os.UserHomeDir()
 		if homeErr == nil {
 			defaultConfigPath = filepath.Join(home, ".config", "rivet", "rivet.yaml")
@@ -54,7 +56,7 @@ func main() {
 		return
 	}
 
-	slog.Info("Starting Rivet ", "version", version, "configFile", *configFile)
+	slog.Info("Starting Rivet ", "build", build, "version", version, "configFile", *configFile)
 
 	appCfg, err := config.LoadConfig(*configFile)
 	if err != nil {
